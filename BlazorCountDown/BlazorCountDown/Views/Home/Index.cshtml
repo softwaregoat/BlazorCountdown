@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Drawing>
+@{
+    ViewData["Title"] = "Home Page";
+    var Data = Model;
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+@if (Data == null)
+{
+    <p>
+        Retrieving Data ...
+    </p>
+}
+else
+{
+    <div style="margin-left: 70px">
+        @foreach (Drawing drawing in Data)
+        {
+            <hr />
+            <div class="drawing">
+                <label>Campaign Starts:</label>
+                <input type="text" class="time" value="@drawing.time.ToShortDateString()" disabled />
+                <label>Countdown:</label>
+                <input type="text" class="countdown" value="" disabled />
+            </div>
+            <hr />
+        }
+    </div>
+    <br />
+    <div class="spacer10"></div>
+}
+<!-- Display the countdown timer in an element -->
+<p id="demo"></p>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+// Set the date we're counting down to
+    $(document).ready(function () {
+        $('div.drawing').each(function (i, em) {
+            var time = $(em).find('input.time').val();
+            var x = setInterval(function () {
+                var count = CountDown(time);
+                if (count == 'EXPIRED') clearInterval(x);
+                $(em).find('input.countdown').val(count);
+            }, 1000);
+        });
+    });
+    function CountDown(time) {
+        var countDownDate = new Date(time).getTime();
+        // Update the count down every 1 second
+        // Get today's date and time
+        var now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // If the count down is finished, write some text
+        
+        if (distance < 0) {
+            return "EXPIRED";
+        } else {
+            
+            var str = days + " : " + hours + " : "
+                + minutes + " : " + seconds;
+            console.log(str);
+            return str;
+        }
+    }
+
+</script>
